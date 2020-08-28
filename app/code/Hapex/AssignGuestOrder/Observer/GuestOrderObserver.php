@@ -43,9 +43,9 @@ class GuestOrderObserver extends BaseObserver
     private function processOrder($order = null)
     {
         try {
+            $orderNumber = $order->getIncrementId();
             switch ($this->helperOrder->isGuestOrder($order)) {
                 case true:
-                    $orderNumber = $order->getIncrementId();
                     $this->helperData->log("Guest Order #$orderNumber detected");
                     $this->helperData->log("Attempting to assign to existing customer");
                     switch ($this->helperOrder->assignGuestOrder($order)) {
@@ -60,7 +60,7 @@ class GuestOrderObserver extends BaseObserver
                     break;
 
                 default:
-                    $this->helperData->log("No Guest Order detected");
+                    $this->helperData->log("Order #$orderNumber is not a Guest Order");
                     break;
             }
         } catch (\Exception $e) {
