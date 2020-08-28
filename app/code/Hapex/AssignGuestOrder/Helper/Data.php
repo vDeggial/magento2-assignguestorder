@@ -19,4 +19,9 @@ class Data extends DataHelper
     {
         return $this->getConfigFlag(self::XML_PATH_CONFIG_ENABLED);
     }
+
+    public function log($message)
+    {
+        $this->helperLog->printLog(self::FILE_PATH_LOG, $message);
+    }
 }

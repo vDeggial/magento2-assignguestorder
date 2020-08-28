@@ -25,6 +25,25 @@ class GuestOrderObserver extends BaseObserver
 
     public function execute(Observer $observer)
     {
-        
+        try {
+            $this->helperData->log("");
+            $this->helperData->log("Starting Guest Order Observer");
+            $order = $observer->getEvent()->getOrder();
+            $this->helperData->log("Checking for Guest Order");
+            if ($this->helper->isModuleEnabled() && $this->helperOrder->isGuestOrder($order)) {
+                $orderNumber = $order->getIncrementId();
+                $this->helperData->log("Guest Order #$orderNumber detected");
+                $this->helperData->log("Attempting to assign to existing customer");
+                if ($this->helperOrder->assignGuestOrder($order)) {
+                    $this->helperData->log("Guest Order assigned successfully");
+                } else {
+                    $this->helperData->log("Could not assign guest order to existing customer");
+                }
+            }
+            $this->helperData->log("Ending Guest Order Observer");
+        } catch (\Exception $e) {
+            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
+        }
     }
 }
