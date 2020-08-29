@@ -31,34 +31,32 @@ class Order extends OrderHelper
     {
         $assigned = false;
         try {
-            $helperCustomer = $this->generateClassObject(CustomerHelper::class);
             $customerEmail = $order->getCustomerEmail();
-            switch (!empty($customerEmail)) {
+            switch (isset($customerEmail)) {
                 case true:
-                    $customer = $helperCustomer->getCustomerByEmail($customerEmail);
-                    $assigned = $this->assignToCustomer($order, $customer, $customerEmail);
+                    $assigned = $this->assignToCustomer($order, $customerEmail);
                     break;
             }
         } catch (\Exception $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $assigned = false;
-        }
-        finally{
+        } finally {
             return $assigned;
         }
     }
 
-    private function assignToCustomer($order = null, $customer = null, $customerEmail = null)
+    private function assignToCustomer($order = null, $customerEmail = null)
     {
         $assigned = false;
         try {
-            $customerId = $customer->getId();
-            switch (isset($customerId)) {
+            $data = $this->getCustomerData($customerEmail = null);
+            switch ($data["exists"]) {
                 case true:
                     $this->helperData->log("Existing customer found for $customerEmail");
-                    $customerFirstName = $customer->getFirstname();
-                    $customerLastName = $customer->getLastname();
-                    $customerGroupId = $customer->getGroupId();
+                    $customerId = $data["id"];
+                    $customerFirstName = $data["first-name"];
+                    $customerLastName = $data["last-name"];
+                    $customerGroupId = $data["group-id"];
                     $order->setCustomerId($customerId);
                     $order->setCustomerFirstname($customerFirstName);
                     $order->setCustomerLastname($customerLastName);
@@ -71,10 +69,33 @@ class Order extends OrderHelper
         } catch (\Exception $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $assigned = false;
-        }
-        finally
-        {
+        } finally {
             return $assigned;
+        }
+    }
+
+    private function getCustomerData($customerEmail = null)
+    {
+        $data = ["id" => 0, "first-name" => null, "last-name" => null, "group-id" => 0, "exists" => false];
+        try {
+            $helperCustomer = $this->generateClassObject(CustomerHelper::class);
+            $customer = $helperCustomer->getCustomerByEmail($customerEmail);
+            $customerId = $customer->getId();
+            $exists = isset($customerId);
+            switch ($exists) {
+                case true:
+                    $data["first-name"] = $customer->getFirstname();
+                    $data["last-name"] = $customer->getLastname();
+                    $data["group-id"] = $customer->getGroupId();
+                    $data["id"] = $customerId;
+                    $data["exists"] = $exists;
+                    break;
+            }
+        } catch (\Exception $e) {
+            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $data = ["id" => 0, "first-name" => null, "last-name" => null, "group-id" => 0, "exists" => false];
+        } finally {
+            return $data;
         }
     }
 }
