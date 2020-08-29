@@ -52,10 +52,10 @@ class Order extends OrderHelper
     {
         $assigned = false;
         try {
-            switch (isset($customer)) {
+            $customerId = $customer->getId();
+            switch (isset($customerId)) {
                 case true:
                     $this->helperData->log("Existing customer found for $customerEmail");
-                    $customerId = $customer->getId();
                     $customerFirstName = $customer->getFirstname();
                     $customerLastName = $customer->getLastname();
                     $customerGroupId = $customer->getGroupId();
