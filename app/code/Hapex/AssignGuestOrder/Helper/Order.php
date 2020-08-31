@@ -62,8 +62,13 @@ class Order extends OrderHelper
                     $order->setCustomerLastname($customerLastName);
                     $order->setCustomerGroupId($customerGroupId);
                     $order->setCustomerIsGuest(0);
-                    $this->helperData->log("Assigned order to $customerFirstName $customerLastName ($customerId / $customerEmail)");
+                    $this->helperData->log("Assigned order to existing customer: $customerFirstName $customerLastName");
                     $assigned = true;
+                    break;
+
+                default:
+                    $this->helperData->log("No existing customer found for email: $customerEmail");
+                    $assigned = false;
                     break;
             }
         } catch (\Exception $e) {

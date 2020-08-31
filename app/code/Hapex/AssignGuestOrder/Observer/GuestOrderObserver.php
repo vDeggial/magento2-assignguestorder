@@ -54,7 +54,7 @@ class GuestOrderObserver extends BaseObserver
                             break;
 
                         default:
-                            $this->helperData->log("Could not assign guest order to existing customer");
+                            $this->helperData->log("Did not assign the Guest Order to any existing customer");
                             break;
                     }
                     break;
