@@ -31,7 +31,7 @@ class Order extends OrderHelper
     {
         $assigned = false;
         try {
-            $customerEmail = $order->getCustomerEmail();
+            $customerEmail = $this->helperAddress->getOrderCustomerEmail($order);
             switch (isset($customerEmail)) {
                 case true:
                     $assigned = $this->assignToCustomer($order, $customerEmail);
@@ -49,7 +49,7 @@ class Order extends OrderHelper
     {
         $assigned = false;
         try {
-            $data = $this->getCustomerData($customerEmail = null);
+            $data = $this->getCustomerData($customerEmail);
             switch ($data["exists"]) {
                 case true:
                     $this->helperData->log("Existing customer found for $customerEmail");
