@@ -81,24 +81,22 @@ class Order extends OrderHelper
 
     private function getCustomerData($customerEmail = null)
     {
-        $data = ["id" => 0, "first-name" => null, "last-name" => null, "group-id" => 0, "exists" => false];
+        $data = ["exists" => false];
         try {
             $helperCustomer = $this->generateClassObject(CustomerHelper::class);
-            $customer = $helperCustomer->getCustomerByEmail($customerEmail);
-            $customerId = $customer->getId();
-            $exists = isset($customerId);
-            switch ($exists) {
-                case true:
-                    $data["first-name"] = $customer->getFirstname();
-                    $data["last-name"] = $customer->getLastname();
-                    $data["group-id"] = $customer->getGroupId();
-                    $data["id"] = $customerId;
-                    $data["exists"] = $exists;
-                    break;
+            $customerId = $helperCustomer->getCustomerIdByEmail($customerEmail);
+            if ($customerId > 0) {
+                $data = [
+                    "first-name" => $helperCustomer->getCustomerFirstName($customerId),
+                    "last-name" => $helperCustomer->getCustomerLastName($customerId),
+                    "group-id" => $helperCustomer->getCustomerGroup($customerId),
+                    "id" => $customerId,
+                    "exists" => true
+                ];
             }
         } catch (\Exception $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
-            $data = ["id" => 0, "first-name" => null, "last-name" => null, "group-id" => 0, "exists" => false];
+            $data = ["exists" => false];
         } finally {
             return $data;
         }
