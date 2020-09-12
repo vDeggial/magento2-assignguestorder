@@ -52,7 +52,7 @@ class Order extends OrderHelper
             $data = $this->getCustomerData($customerEmail);
             switch ($data["exists"]) {
                 case true:
-                    $this->helperData->log("Existing customer found for $customerEmail");
+                    $this->helperData->log("Found an existing customer for email: $customerEmail");
                     $customerId = $data["id"];
                     $customerFirstName = $data["first-name"];
                     $customerLastName = $data["last-name"];
@@ -62,12 +62,14 @@ class Order extends OrderHelper
                     $order->setCustomerLastname($customerLastName);
                     $order->setCustomerGroupId($customerGroupId);
                     $order->setCustomerIsGuest(0);
-                    $this->helperData->log("Assigned order to existing customer: $customerFirstName $customerLastName");
+                    $comment = "Guest Order was assigned to an existing customer: $customerFirstName $customerLastName ($customerEmail)";
+                    $order->addStatusHistoryComment($comment);
+                    $this->helperData->log($comment);
                     $assigned = true;
                     break;
 
                 default:
-                    $this->helperData->log("No existing customer found for email: $customerEmail");
+                    $this->helperData->log("Found no existing customer for email: $customerEmail");
                     $assigned = false;
                     break;
             }
