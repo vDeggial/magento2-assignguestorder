@@ -34,7 +34,7 @@ class GuestOrderObserver extends BaseObserver
                 $this->processOrder($order);
             }
             $this->helperData->log("Ending Guest Order Observer");
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
         }
@@ -63,7 +63,7 @@ class GuestOrderObserver extends BaseObserver
                     $this->helperData->log("Order #$orderNumber is not a Guest Order");
                     break;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $this->messageManager->addErrorMessage($e->getMessage());
         }

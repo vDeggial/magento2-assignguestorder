@@ -37,7 +37,7 @@ class Order extends OrderHelper
                     $assigned = $this->assignToCustomer($order, $customerEmail);
                     break;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $assigned = false;
         } finally {
@@ -73,7 +73,7 @@ class Order extends OrderHelper
                     $assigned = false;
                     break;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $assigned = false;
         } finally {
@@ -96,7 +96,7 @@ class Order extends OrderHelper
                     "exists" => true
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $e->getMessage());
             $data = ["exists" => false];
         } finally {
