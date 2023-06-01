@@ -35,7 +35,7 @@ class GuestOrderObserver extends BaseObserver
             }
             $this->helperData->log("Ending Guest Order Observer");
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $this->messageManager->addErrorMessage($e->getMessage());
         }
     }
@@ -64,7 +64,7 @@ class GuestOrderObserver extends BaseObserver
                     break;
             }
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $this->messageManager->addErrorMessage($e->getMessage());
         }
     }

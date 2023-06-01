@@ -38,7 +38,7 @@ class Order extends OrderHelper
                     break;
             }
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $assigned = false;
         } finally {
             return $assigned;
@@ -74,7 +74,7 @@ class Order extends OrderHelper
                     break;
             }
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $assigned = false;
         } finally {
             return $assigned;
@@ -97,7 +97,7 @@ class Order extends OrderHelper
                 ];
             }
         } catch (\Throwable $e) {
-            $this->helperLog->errorLog(__METHOD__, $e->getMessage());
+            $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $data = ["exists" => false];
         } finally {
             return $data;
