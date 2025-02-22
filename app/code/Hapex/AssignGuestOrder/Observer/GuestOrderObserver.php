@@ -17,7 +17,7 @@ class GuestOrderObserver extends BaseObserver
         DataHelper $helperData,
         OrderHelper $helperOrder,
         LogHelper $helperLog,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
     ) {
         parent::__construct($helperData, $helperLog, $messageManager);
         $this->helperOrder = $helperOrder;
@@ -37,6 +37,8 @@ class GuestOrderObserver extends BaseObserver
         } catch (\Throwable $e) {
             $this->helperLog->errorLog(__METHOD__, $this->helperLog->getExceptionTrace($e));
             $this->messageManager->addErrorMessage($e->getMessage());
+        } finally {
+            return $this;
         }
     }
 
